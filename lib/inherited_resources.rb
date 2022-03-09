@@ -25,7 +25,7 @@ module InheritedResources
   end
 end
 
-ActiveSupport.on_load(:action_controller_base) do
+ActiveSupport.on_load(:action_controller_api) do
   # If you cannot inherit from InheritedResources::Base you can call
   # inherit_resources in your controller to have all the required modules and
   # funcionality included.
