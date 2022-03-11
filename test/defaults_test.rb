@@ -10,7 +10,7 @@ end
 
 class PaintersController < InheritedResources::Base
   defaults instance_name: 'malarz', collection_name: 'malarze',
-           resource_class: Malarz, route_prefix: nil,
+           inherited_resource_class: Malarz, route_prefix: nil,
            finder: :find_by_slug
 end
 
@@ -168,8 +168,8 @@ class NamespacedModelForNamespacedController < ActionController::TestCase
 
   def test_that_it_picked_the_namespaced_model
     # make public so we can test it
-    Admin::GroupsController.send(:public, :resource_class)
-    assert_equal Admin::Group, @controller.resource_class
+    Admin::GroupsController.send(:public, :inherited_resource_class)
+    assert_equal Admin::Group, @controller.inherited_resource_class
   end
 end
 
@@ -184,8 +184,8 @@ class TwoPartNameModelForNamespacedController < ActionController::TestCase
 
   def test_that_it_picked_the_camelcased_model
     # make public so we can test it
-    Admin::RolesController.send(:public, :resource_class)
-    assert_equal AdminRole, @controller.resource_class
+    Admin::RolesController.send(:public, :inherited_resource_class)
+    assert_equal AdminRole, @controller.inherited_resource_class
   end
 end
 
@@ -198,8 +198,8 @@ class AnotherTwoPartNameModelForNamespacedController < ActionController::TestCas
 
   def test_that_it_picked_the_camelcased_model
     # make public so we can test it
-    Admin::UsersController.send(:public, :resource_class)
-    assert_equal User, @controller.resource_class
+    Admin::UsersController.send(:public, :inherited_resource_class)
+    assert_equal User, @controller.inherited_resource_class
   end
 
   def test_that_it_got_the_request_params_right
@@ -219,7 +219,7 @@ module MyEngine
   end
 
   class PeopleController < InheritedResources::Base
-    defaults resource_class: Person
+    defaults inherited_resource_class: Person
   end
 end
 

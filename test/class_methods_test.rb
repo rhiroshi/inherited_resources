@@ -112,26 +112,26 @@ class ActionsClassMethodTest < ActionController::TestCase
 end
 
 class DefaultsClassMethodTest < ActiveSupport::TestCase
-  def test_resource_class_is_set_to_nil_when_resource_model_cannot_be_found
-    assert_nil ReadersController.send(:resource_class)
+  def test_inherited_resource_class_is_set_to_nil_when_resource_model_cannot_be_found
+    assert_nil ReadersController.send(:inherited_resource_class)
   end
 
   def test_defaults_are_set
-    assert_equal Folder, FoldersController.send(:resource_class)
+    assert_equal Folder, FoldersController.send(:inherited_resource_class)
     assert_equal :folder, FoldersController.send(:resources_configuration)[:self][:instance_name]
     assert_equal :folders, FoldersController.send(:resources_configuration)[:self][:collection_name]
   end
 
   def test_defaults_can_be_overwriten
-    BooksController.send(:defaults, resource_class: String, instance_name: 'string', collection_name: 'strings')
+    BooksController.send(:defaults, inherited_resource_class: String, instance_name: 'string', collection_name: 'strings')
 
-    assert_equal String, BooksController.send(:resource_class)
+    assert_equal String, BooksController.send(:inherited_resource_class)
     assert_equal :string, BooksController.send(:resources_configuration)[:self][:instance_name]
     assert_equal :strings, BooksController.send(:resources_configuration)[:self][:collection_name]
 
     BooksController.send(:defaults, class_name: 'Integer', instance_name: :integer, collection_name: :integers)
 
-    assert_equal Integer, BooksController.send(:resource_class)
+    assert_equal Integer, BooksController.send(:inherited_resource_class)
     assert_equal :integer, BooksController.send(:resources_configuration)[:self][:instance_name]
     assert_equal :integers, BooksController.send(:resources_configuration)[:self][:collection_name]
   end
@@ -207,10 +207,10 @@ class BelongsToErrorsTest < ActiveSupport::TestCase
 end
 
 class SpecialCasesClassMethodTest < ActionController::TestCase
-  def test_resource_class_to_corresponding_model_class
-    assert_equal Controller::User, Controller::UsersController.send(:resource_class)
-    assert_equal Controller::User, Controller::Admin::UsersController.send(:resource_class)
-    assert_equal ControllerGroup, Controller::GroupsController.send(:resource_class)
+  def test_inherited_resource_class_to_corresponding_model_class
+    assert_equal Controller::User, Controller::UsersController.send(:inherited_resource_class)
+    assert_equal Controller::User, Controller::Admin::UsersController.send(:inherited_resource_class)
+    assert_equal ControllerGroup, Controller::GroupsController.send(:inherited_resource_class)
   end
 end
 

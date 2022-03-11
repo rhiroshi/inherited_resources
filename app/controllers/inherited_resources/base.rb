@@ -20,7 +20,7 @@ module InheritedResources
         respond_to :json if self.mimes_for_respond_to.empty?
         self.responder = InheritedResources::Responder
 
-        helper_method :resource, :collection, :resource_class, :association_chain,
+        helper_method :resource, :collection, :inherited_resource_class, :association_chain,
                       :resource_instance_name, :resource_collection_name,
                       :resource_url, :resource_path,
                       :collection_url, :collection_path,
@@ -29,11 +29,11 @@ module InheritedResources
                       :parent_url, :parent_path,
                       :smart_resource_url, :smart_collection_url
 
-        self.class_attribute :resource_class, instance_writer: false unless self.respond_to? :resource_class
+        self.class_attribute :inherited_resource_class, instance_writer: false unless self.respond_to? :inherited_resource_class
         self.class_attribute :parents_symbols,  :resources_configuration, instance_writer: false
 
-        protected :resource_class, :parents_symbols, :resources_configuration,
-          :resource_class?, :parents_symbols?, :resources_configuration?
+        protected :inherited_resource_class, :parents_symbols, :resources_configuration,
+          :inherited_resource_class?, :parents_symbols?, :resources_configuration?
       end
     end
 

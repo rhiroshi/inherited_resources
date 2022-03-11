@@ -215,7 +215,7 @@ module InheritedResources
               args[parent_index] = given_args.present? ? given_args.first : parent
             end
             if (name == :collection || name == :resource && prefix == :new) && !singleton
-              args << (@_resource_class_new ||= resource_class.new)
+              args << (@_inherited_resource_class_new ||= inherited_resource_class.new)
             end
             args.compact! if self.resources_configuration[:polymorphic][:optional]
             args = [args]

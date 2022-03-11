@@ -69,7 +69,7 @@ _No changes_.
 
 * Lock the Rails version until only 4.2.
 * Fix parent class lookup.
-* Fix resource_class default value definition.
+* Fix inherited_resource_class default value definition.
 
 ## Version 1.5.0
 

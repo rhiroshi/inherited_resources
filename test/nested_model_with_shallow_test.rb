@@ -15,14 +15,14 @@ module Plan
 end
 
 class GroupsController < InheritedResources::Base
-  defaults resource_class: Plan::Group, finder: :find_by_slug
+  defaults inherited_resource_class: Plan::Group, finder: :find_by_slug
   belongs_to :subfaculty, shallow: true do
     belongs_to :speciality
   end
 end
 
 class EducationsController < InheritedResources::Base
-  defaults resource_class: Plan::Education
+  defaults inherited_resource_class: Plan::Education
   belongs_to :subfaculty, shallow: true do
     belongs_to :speciality do
       belongs_to :group, parent_class: Plan::Group,

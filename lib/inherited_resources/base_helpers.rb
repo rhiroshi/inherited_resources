@@ -181,7 +181,7 @@ module InheritedResources
             chain
           end
         else
-          apply_scopes_if_available(resource_class)
+          apply_scopes_if_available(inherited_resource_class)
         end
       end
 

@@ -9,7 +9,7 @@ module InheritedResources
       #
       # == Options
       #
-      # * <tt>:resource_class</tt> - The resource class which by default is guessed
+      # * <tt>:inherited_resource_class</tt> - The resource class which by default is guessed
       #                              by the controller name. Defaults to Project in
       #                              ProjectsController.
       #
@@ -38,24 +38,24 @@ module InheritedResources
         raise ArgumentError, 'Class method :defaults expects a hash of options.' unless options.is_a? Hash
 
         options.symbolize_keys!
-        options.assert_valid_keys(:resource_class, :collection_name, :instance_name,
+        options.assert_valid_keys(:inherited_resource_class, :collection_name, :instance_name,
                                   :class_name, :route_prefix, :route_collection_name,
                                   :route_instance_name, :singleton, :finder)
 
-        self.resource_class = options[:resource_class] if options.key?(:resource_class)
-        self.resource_class = options[:class_name].constantize if options.key?(:class_name)
+        self.inherited_resource_class = options[:inherited_resource_class] if options.key?(:inherited_resource_class)
+        self.inherited_resource_class = options[:class_name].constantize if options.key?(:class_name)
 
         acts_as_singleton! if options.delete(:singleton)
 
         config = self.resources_configuration[:self]
 
-        if options.key?(:resource_class) or options.key?(:class_name)
+        if options.key?(:inherited_resource_class) or options.key?(:class_name)
           config[:request_name] = begin
-            request_name = self.resource_class
+            request_name = self.inherited_resource_class
             request_name = request_name.model_name.param_key if request_name.respond_to?(:model_name)
             request_name.to_s.underscore.gsub('/', '_')
           end
-          options.delete(:resource_class) and options.delete(:class_name)
+          options.delete(:inherited_resource_class) and options.delete(:class_name)
         end
 
         options.each do |key, value|
@@ -317,7 +317,7 @@ module InheritedResources
       #
       def initialize_resources_class_accessors! #:nodoc:
         # First priority is the namespaced model, e.g. User::Group
-        self.resource_class ||= begin
+        self.inherited_resource_class ||= begin
           namespaced_class = self.name.sub(/Controller$/, '').singularize
           namespaced_class.constantize
         rescue NameError
@@ -325,7 +325,7 @@ module InheritedResources
         end
 
         # Second priority is the top namespace model, e.g. EngineName::Article for EngineName::Admin::ArticlesController
-        self.resource_class ||= begin
+        self.inherited_resource_class ||= begin
           namespaced_classes = self.name.sub(/Controller$/, '').split('::')
           namespaced_class = [namespaced_classes.first, namespaced_classes.last].join('::').singularize
           namespaced_class.constantize
@@ -334,7 +334,7 @@ module InheritedResources
         end
 
         # Third priority the camelcased c, i.e. UserGroup
-        self.resource_class ||= begin
+        self.inherited_resource_class ||= begin
           camelcased_class = self.name.sub(/Controller$/, '').gsub('::', '').singularize
           camelcased_class.constantize
         rescue NameError
@@ -342,7 +342,7 @@ module InheritedResources
         end
 
         # Otherwise use the Group class, or fail
-        self.resource_class ||= begin
+        self.inherited_resource_class ||= begin
           class_name = self.controller_name.classify
           class_name.constantize
         rescue NameError => e
@@ -384,7 +384,7 @@ module InheritedResources
         # Forum::Thread#create will properly pick up the request parameter
         # which will be forum_thread, and not thread
         # Additionally make this work orthogonally with instance_name
-        config[:request_name] = self.resource_class.to_s.underscore.gsub('/', '_')
+        config[:request_name] = self.inherited_resource_class.to_s.underscore.gsub('/', '_')
 
         # Initialize polymorphic, singleton, scopes and belongs_to parameters
         polymorphic = self.resources_configuration[:polymorphic] || { symbols: [], optional: false }

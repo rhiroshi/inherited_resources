@@ -140,7 +140,7 @@ In your views, you will get the following helpers:
 ```ruby
 resource        #=> @project
 collection      #=> @projects
-resource_class  #=> Project
+inherited_resource_class  #=> Project
 ```
 
 As you might expect, collection (`@projects` instance variable) is only available
@@ -176,7 +176,7 @@ resource is a `User`:
 
 ```ruby
 class AccountsController < InheritedResources::Base
-  defaults :resource_class => User, :collection_name => 'users', :instance_name => 'user'
+  defaults :inherited_resource_class => User, :collection_name => 'users', :instance_name => 'user'
 end
 ```
 

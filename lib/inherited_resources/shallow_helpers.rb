@@ -21,7 +21,7 @@ module InheritedResources
 
         if id = params[:id]
           finder_method = resources_configuration[:self][:finder] || :find
-          instance      = self.resource_class.send(finder_method, id)
+          instance      = self.inherited_resource_class.send(finder_method, id)
         elsif parents_symbols.size > 1
           config         = resources_configuration[parent_symbols.pop]
           finder_method  = config[:finder] || :find
