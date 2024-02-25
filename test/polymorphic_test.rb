@@ -44,6 +44,7 @@ class PolymorphicFactoriesTest < ActionController::TestCase
   def test_expose_all_employees_as_instance_variable_on_index
     Employee.expects(:scoped).returns([mock_employee])
     get :index, params: { factory_id: '37' }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal [mock_employee], assigns(:employees)
   end
@@ -51,6 +52,7 @@ class PolymorphicFactoriesTest < ActionController::TestCase
   def test_expose_the_requested_employee_on_show
     Employee.expects(:find).with('42').returns(mock_employee)
     get :show, params: { id: '42', factory_id: '37' }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -58,6 +60,7 @@ class PolymorphicFactoriesTest < ActionController::TestCase
   def test_expose_a_new_employee_on_new
     Employee.expects(:build).returns(mock_employee)
     get :new, params: { factory_id: '37' }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -65,22 +68,25 @@ class PolymorphicFactoriesTest < ActionController::TestCase
   def test_expose_the_requested_employee_on_edit
     Employee.expects(:find).with('42').returns(mock_employee)
     get :edit, params: { id: '42', factory_id: '37' }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
     assert_response :success
   end
 
   def test_expose_a_newly_create_employee_on_create
-    Employee.expects(:build).with({'these' => 'params'}).returns(mock_employee(save: true))
+    Employee.expects(:build).with(build_parameters({'these' => 'params'})).returns(mock_employee(save: true))
     post :create, params: { factory_id: '37', employee: {these: 'params'} }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
   end
 
   def test_update_the_requested_object_on_update
     Employee.expects(:find).with('42').returns(mock_employee)
-    mock_employee.expects(:update).with({'these' => 'params'}).returns(true)
+    mock_employee.expects(:update).with(build_parameters({'these' => 'params'})).returns(true)
     put :update, params: { id: '42', factory_id: '37', employee: {these: 'params'} }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -89,6 +95,7 @@ class PolymorphicFactoriesTest < ActionController::TestCase
     Employee.expects(:find).with('42').returns(mock_employee)
     mock_employee.expects(:destroy)
     delete :destroy, params: { id: '42', factory_id: '37' }
+
     assert_equal mock_factory, assigns(:factory)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -116,6 +123,10 @@ class PolymorphicFactoriesTest < ActionController::TestCase
     def mock_employee(stubs={})
       @mock_employee ||= mock(stubs)
     end
+
+    def build_parameters(hash)
+      ActionController::Parameters.new(hash)
+    end
 end
 
 class PolymorphicCompanyTest < ActionController::TestCase
@@ -140,6 +151,7 @@ class PolymorphicCompanyTest < ActionController::TestCase
   def test_expose_all_employees_as_instance_variable_on_index
     Employee.expects(:scoped).returns([mock_employee])
     get :index, params: { company_id: '37' }
+
     assert_equal mock_company, assigns(:company)
     assert_equal [mock_employee], assigns(:employees)
   end
@@ -147,6 +159,7 @@ class PolymorphicCompanyTest < ActionController::TestCase
   def test_expose_the_requested_employee_on_show
     Employee.expects(:find).with('42').returns(mock_employee)
     get :show, params: { id: '42', company_id: '37' }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -154,6 +167,7 @@ class PolymorphicCompanyTest < ActionController::TestCase
   def test_expose_a_new_employee_on_new
     Employee.expects(:build).returns(mock_employee)
     get :new, params: { company_id: '37' }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -161,22 +175,25 @@ class PolymorphicCompanyTest < ActionController::TestCase
   def test_expose_the_requested_employee_on_edit
     Employee.expects(:find).with('42').returns(mock_employee)
     get :edit, params: { id: '42', company_id: '37' }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
     assert_response :success
   end
 
   def test_expose_a_newly_create_employee_on_create
-    Employee.expects(:build).with({'these' => 'params'}).returns(mock_employee(save: true))
+    Employee.expects(:build).with(build_parameters({'these' => 'params'})).returns(mock_employee(save: true))
     post :create, params: { company_id: '37', employee: {these: 'params'} }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
   end
 
   def test_update_the_requested_object_on_update
     Employee.expects(:find).with('42').returns(mock_employee)
-    mock_employee.expects(:update).with({'these' => 'params'}).returns(true)
+    mock_employee.expects(:update).with(build_parameters({'these' => 'params'})).returns(true)
     put :update, params: { id: '42', company_id: '37', employee: {these: 'params'} }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -185,6 +202,7 @@ class PolymorphicCompanyTest < ActionController::TestCase
     Employee.expects(:find).with('42').returns(mock_employee)
     mock_employee.expects(:destroy)
     delete :destroy, params: { id: '42', company_id: '37' }
+
     assert_equal mock_company, assigns(:company)
     assert_equal mock_employee, assigns(:employee)
   end
@@ -212,6 +230,10 @@ class PolymorphicCompanyTest < ActionController::TestCase
     def mock_employee(stubs={})
       @mock_employee ||= mock(stubs)
     end
+
+    def build_parameters(hash)
+      ActionController::Parameters.new(hash)
+    end
 end
 
 class PolymorphicPhotosTest < ActionController::TestCase
@@ -231,6 +253,7 @@ class PolymorphicPhotosTest < ActionController::TestCase
 
   def test_parent_as_instance_variable_on_index_when_method_overwritten
     get :index, params: { user_id: '37' }
+
     assert_equal mock_user, assigns(:user)
   end
 
